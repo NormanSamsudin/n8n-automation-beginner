@@ -6,7 +6,7 @@ This repo is a practical guide to learning n8n. You'll learn how to deploy on a 
 
 Here's an example of a Telegram bot workflow integrated with AI capabilities:
 
-![n8n Telegram Bot Workflow](https://github.com/user-attachments/assets/your-image-url-here)
+![n8n Telegram Bot Workflow](https://raw.githubusercontent.com/NormanSamsudin/n8n-automation-beginner/refs/heads/main/teegram_workflow.png)
 
 *This workflow demonstrates a Telegram bot that uses AI Agent with Google Gemini Chat Model, Simple Memory, and stock data integration.*
 
