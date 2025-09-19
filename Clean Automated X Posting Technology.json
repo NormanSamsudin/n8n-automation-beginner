@@ -1,0 +1,1196 @@
+{
+  "name": "Clean Automated X Posting Technology",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Workflow Fetch Content From Hacker News\n",
+        "height": 352,
+        "width": 1584,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -912,
+        2656
+      ],
+      "typeVersion": 1,
+      "id": "d2555ac0-f23f-4823-baa6-a8d877e66b05",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "url": "https://thehackernews.com",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -832,
+        2768
+      ],
+      "id": "a189b550-ca34-4b92-b262-a1e86525eb01",
+      "name": "Fetch Article List1"
+    },
+    {
+      "parameters": {
+        "operation": "extractHtmlContent",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "article",
+              "cssSelector": " a.story-link",
+              "returnValue": "attribute",
+              "attribute": "href",
+              "returnArray": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        -608,
+        2768
+      ],
+      "id": "177c14ba-800e-4582-b8c9-c3ef688eb1ab",
+      "name": "Extract Article List1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "14c0c1e8-58b5-4975-a378-7914625edd38",
+              "name": "hacker_news_article",
+              "value": "={{ $json.article[0] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -400,
+        2768
+      ],
+      "id": "42aba309-6cc3-40cd-a5e2-f5dedcf3cd91",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.hacker_news_article }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -192,
+        2768
+      ],
+      "id": "7f2122a9-ce3a-42e5-ab38-0d86a0c26328",
+      "name": "HTTP Request4"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.data }}\n\nBerdasarkan berita diatas tulis rumusan maklumat. penjelasan mestilah tidak melebihi 280 character. penggunaan ayat mesti macam budak melayu genz.\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        32,
+        2704
+      ],
+      "id": "6a1454dc-bdde-4a3c-baae-1eedd8889601",
+      "name": "AI Agent5"
+    },
+    {
+      "parameters": {
+        "text": "={{ $json.output }}\n\n{{ $('Edit Fields1').item.json.hacker_news_article }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.twitter",
+      "typeVersion": 2,
+      "position": [
+        384,
+        2768
+      ],
+      "id": "daaec020-5273-4df1-9470-0a7bbc3eded2",
+      "name": "Create Tweet4",
+      "credentials": {
+        "twitterOAuth2Api": {
+          "id": "bBFAzLhbzN6KQWRA",
+          "name": "You Know Tech Production"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        0,
+        2880
+      ],
+      "id": "00834f80-2c28-4f47-9b70-b6bbbac651f5",
+      "name": "Google Gemini Chat Model3",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "nV7odLBrLItpiXmN",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Workflow Fetch Content Teknolog Bernama News\n",
+        "height": 352,
+        "width": 1584,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -912,
+        3152
+      ],
+      "typeVersion": 1,
+      "id": "e3308e9d-92a1-4411-9f29-d219223af07f",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "url": "https://www.utusan.com.my/?s=teknologi",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -832,
+        3264
+      ],
+      "id": "94a0314a-b075-4a89-b052-6af497f4abcd",
+      "name": "Fetch Article List4"
+    },
+    {
+      "parameters": {
+        "operation": "extractHtmlContent",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "article",
+              "cssSelector": "a[href]",
+              "returnValue": "attribute",
+              "returnArray": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        -592,
+        3264
+      ],
+      "id": "84459ca0-f4ba-4a7f-bfbd-0d578eb33a8e",
+      "name": "Extract Article List4"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.href }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -176,
+        3264
+      ],
+      "id": "ac5a983d-c946-4b3e-8805-5506f8b56643",
+      "name": "HTTP Request8",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.data }}\n\nBerdasarkan berita diatas tulis rumusan maklumat. penjelasan mestilah tidak melebihi 280 character. penggunaan ayat mesti macam budak melayu genz.\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        48,
+        3200
+      ],
+      "id": "36a3808b-d327-41ac-8ff5-eae227fa260a",
+      "name": "AI Agent9"
+    },
+    {
+      "parameters": {
+        "text": "={{ $json.output }}\n\n{{ $('Code7').item.json.href }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.twitter",
+      "typeVersion": 2,
+      "position": [
+        400,
+        3264
+      ],
+      "id": "564f9cce-70aa-4554-9270-f8b2176ead23",
+      "name": "Create Tweet8",
+      "credentials": {
+        "twitterOAuth2Api": {
+          "id": "bBFAzLhbzN6KQWRA",
+          "name": "You Know Tech Production"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        16,
+        3376
+      ],
+      "id": "75a155e1-9aed-4ecd-923e-cf94884f0468",
+      "name": "Google Gemini Chat Model7",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "nV7odLBrLItpiXmN",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Function to filter items with class = \"adv-link\"\nfunction filterAdvLinks(items) {\n  return items.filter(item => item.class === \"elementor-post__thumbnail__link\");\n}\n\n// Example usage with your structure\nconst input = $input.all(); // this is n8n’s array of items\nconst articles = input[0].json.article; // assuming your JSON is wrapped like this\n\n// Get only adv-link items\nconst advLinks = filterAdvLinks(articles);\n\nreturn advLinks.map(link => ({ json: link }));\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -384,
+        3264
+      ],
+      "id": "130eaab3-651a-479b-8031-c27b46aca480",
+      "name": "Code7"
+    },
+    {
+      "parameters": {
+        "content": "## Workflow Fetch Content Teknologi Utusan News\n",
+        "height": 352,
+        "width": 1584,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -912,
+        3632
+      ],
+      "typeVersion": 1,
+      "id": "439403bf-85c6-48ef-91bb-429ba1b1df58",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "url": "https://www.utusan.com.my/?s=teknologi",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -832,
+        3744
+      ],
+      "id": "aef01b56-7851-47de-8fcb-dc41c03ec76d",
+      "name": "Fetch Article List5"
+    },
+    {
+      "parameters": {
+        "operation": "extractHtmlContent",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "article",
+              "cssSelector": "a[href]",
+              "returnValue": "attribute",
+              "returnArray": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        -608,
+        3744
+      ],
+      "id": "8092f182-b997-4a86-baef-f54309e30f57",
+      "name": "Extract Article List5"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.href }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -192,
+        3744
+      ],
+      "id": "3ba6eb02-be2b-47e5-a398-910f544895be",
+      "name": "HTTP Request9",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.data }}\n\nBerdasarkan berita diatas tulis rumusan maklumat. penjelasan mestilah tidak melebihi 280 character. penggunaan ayat mesti macam budak melayu genz.\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        32,
+        3680
+      ],
+      "id": "dd11233e-6a0e-4d59-9aac-7bf766a7b300",
+      "name": "AI Agent11"
+    },
+    {
+      "parameters": {
+        "text": "={{ $json.output }}\n\n{{ $('Code9').item.json.href }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.twitter",
+      "typeVersion": 2,
+      "position": [
+        432,
+        3696
+      ],
+      "id": "3209ae83-5e54-4a74-8f7a-b2d61cd9e621",
+      "name": "Create Tweet9",
+      "credentials": {
+        "twitterOAuth2Api": {
+          "id": "bBFAzLhbzN6KQWRA",
+          "name": "You Know Tech Production"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        0,
+        3856
+      ],
+      "id": "dde198f5-74cb-40a2-872e-c23166c05349",
+      "name": "Google Gemini Chat Model8",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "nV7odLBrLItpiXmN",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Function to filter items with class = \"adv-link\"\nfunction filterAdvLinks(items) {\n  return items.filter(item => item.class === \"elementor-post__thumbnail__link\");\n}\n\n// Example usage with your structure\nconst input = $input.all(); // this is n8n’s array of items\nconst articles = input[0].json.article; // assuming your JSON is wrapped like this\n\n// Get only adv-link items\nconst advLinks = filterAdvLinks(articles);\n\nreturn advLinks.map(link => ({ json: link }));\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -400,
+        3744
+      ],
+      "id": "6422af24-34e1-4c3a-a1f4-2bf1d33ef5b8",
+      "name": "Code9"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.myNewField }}",
+                    "rightValue": 1,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    },
+                    "id": "b73527f1-e968-455a-a381-5ba60144f499"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "7669def0-01e9-4bbb-a4ab-8a356d37e8d4",
+                    "leftValue": "={{ $json.myNewField }}",
+                    "rightValue": 2,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "81fd8c7d-dacd-4145-ab8b-876410c2d846",
+                    "leftValue": "={{ $json.myNewField }}",
+                    "rightValue": 3,
+                    "operator": {
+                      "type": "number",
+                      "operation": "notEquals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "19f6f4d7-021b-4668-87c0-62c45660a223",
+                    "leftValue": "={{ $json.myNewField }}",
+                    "rightValue": "4",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -1360,
+        3232
+      ],
+      "id": "2537f3f3-c251-446f-bd5b-7e362fae91ad",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field with random number 1-3\nfor (const item of $input.all()) {\n  item.json.myNewField = Math.floor(Math.random() * 4) + 1; \n}\n\nreturn $input.all();\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1616,
+        3248
+      ],
+      "id": "a66623f3-d0f8-49fd-b365-23782fcd5b6f",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 6
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1872,
+        3248
+      ],
+      "id": "ece599c1-53c4-4ff9-a1bf-1cfc141f6d29",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "content": "## Workflow Fetch Content AI Tech Crunch\n",
+        "height": 352,
+        "width": 1584,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -912,
+        4112
+      ],
+      "typeVersion": 1,
+      "id": "023f0691-8298-4a93-a8d6-b9839142aac0",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "url": "https://techcrunch.com/category/artificial-intelligence/",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -832,
+        4224
+      ],
+      "id": "bacb644a-6c9d-4001-861a-df5f1a5dda6f",
+      "name": "Fetch Article List2"
+    },
+    {
+      "parameters": {
+        "operation": "extractHtmlContent",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "article",
+              "cssSelector": "a.loop-card__title-link",
+              "returnValue": "attribute",
+              "attribute": "href",
+              "returnArray": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        -512,
+        4224
+      ],
+      "id": "f04db262-3de4-478d-855a-ba075c180349",
+      "name": "Extract Article List2"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.article[0] }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -192,
+        4224
+      ],
+      "id": "a5c644b9-18b0-42b3-b263-d11d84f8b450",
+      "name": "HTTP Request1",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.data }}\n\nBerdasarkan berita diatas tulis rumusan maklumat. penjelasan mestilah tidak melebihi 280 character. penggunaan ayat mesti macam budak melayu genz.\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        32,
+        4160
+      ],
+      "id": "d976e55c-7690-4ac3-9ec8-52f2183c5358",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "text": "={{ $json.output }}\n\n{{ $('Code10').item.json.href }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.twitter",
+      "typeVersion": 2,
+      "position": [
+        432,
+        4176
+      ],
+      "id": "b65ccd00-18dc-43c3-a7d3-70ac19861c41",
+      "name": "Create Tweet1",
+      "credentials": {
+        "twitterOAuth2Api": {
+          "id": "bBFAzLhbzN6KQWRA",
+          "name": "You Know Tech Production"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        0,
+        4336
+      ],
+      "id": "f7d83b03-f368-4527-a922-b152dc052d43",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "nV7odLBrLItpiXmN",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Workflow Fetch Content CyberSec From End Gadget\n",
+        "height": 352,
+        "width": 1584,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -912,
+        4576
+      ],
+      "typeVersion": 1,
+      "id": "7b7ccad8-b1b2-414e-8c56-aa4462b273a6",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "url": "https://www.engadget.com/cybersecurity/",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -832,
+        4688
+      ],
+      "id": "272218aa-949c-4c83-b482-965704c80cf2",
+      "name": "Fetch Article List"
+    },
+    {
+      "parameters": {
+        "operation": "extractHtmlContent",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "article",
+              "cssSelector": "a.clickable-multi-line-link",
+              "returnValue": "attribute",
+              "attribute": "href",
+              "returnArray": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        -608,
+        4688
+      ],
+      "id": "44ca8ae1-4fd8-4618-98f9-8a00ed61073d",
+      "name": "Extract Article List"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.article[0] }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -192,
+        4688
+      ],
+      "id": "6bc09a4d-4b2c-4f95-ba04-14353da3b1a9",
+      "name": "HTTP Request",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.data }}\n\nBerdasarkan berita diatas tulis rumusan maklumat. penjelasan mestilah tidak melebihi 280 character. penggunaan ayat mesti macam budak melayu genz.\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        32,
+        4624
+      ],
+      "id": "176ab3cb-1141-4127-bebc-a5490c30342a",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "text": "={{ $json.output }}\n\n{{ $('Code10').item.json.href }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.twitter",
+      "typeVersion": 2,
+      "position": [
+        432,
+        4640
+      ],
+      "id": "86354233-b19f-4bc4-95b9-835987f92c70",
+      "name": "Create Tweet",
+      "credentials": {
+        "twitterOAuth2Api": {
+          "id": "bBFAzLhbzN6KQWRA",
+          "name": "You Know Tech Production"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        0,
+        4800
+      ],
+      "id": "42981841-6c66-4931-a435-c69ff2c065f6",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "nV7odLBrLItpiXmN",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Fetch Article List1": {
+      "main": [
+        [
+          {
+            "node": "Extract Article List1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Article List1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request4": {
+      "main": [
+        [
+          {
+            "node": "AI Agent5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent5": {
+      "main": [
+        [
+          {
+            "node": "Create Tweet4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent5",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Article List4": {
+      "main": [
+        [
+          {
+            "node": "Extract Article List4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Article List4": {
+      "main": [
+        [
+          {
+            "node": "Code7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request8": {
+      "main": [
+        [
+          {
+            "node": "AI Agent9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent9": {
+      "main": [
+        [
+          {
+            "node": "Create Tweet8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model7": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent9",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code7": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Article List5": {
+      "main": [
+        [
+          {
+            "node": "Extract Article List5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Article List5": {
+      "main": [
+        [
+          {
+            "node": "Code9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request9": {
+      "main": [
+        [
+          {
+            "node": "AI Agent11",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent11": {
+      "main": [
+        [
+          {
+            "node": "Create Tweet9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model8": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent11",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code9": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Tweet8": {
+      "main": [
+        []
+      ]
+    },
+    "Create Tweet4": {
+      "main": [
+        []
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Fetch Article List1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Fetch Article List4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Fetch Article List2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Fetch Article List",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Article List2": {
+      "main": [
+        [
+          {
+            "node": "Extract Article List2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Article List2": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Create Tweet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Article List": {
+      "main": [
+        [
+          {
+            "node": "Extract Article List",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Article List": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Create Tweet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "80ad9357-60fd-4ce2-ac15-f39d5e320532",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "f61cab361eeccd15a43038a79ae53372391edabfe8be67816317db787e0443fd"
+  },
+  "id": "enhRK8OAJqxJJuEL",
+  "tags": []
+}

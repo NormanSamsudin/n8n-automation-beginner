@@ -1,0 +1,204 @@
+{
+  "name": "Telegram Bot (Kedai Maju Bot)",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "b5774757-d89f-4a11-8867-07a0859be84c",
+      "name": "Telegram Trigger",
+      "webhookId": "63f43b93-1a3c-48e8-8c6e-0465fa2eb005",
+      "credentials": {
+        "telegramApi": {
+          "id": "VWmY4Uic4DSocCpY",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.message.text }}",
+        "options": {
+          "systemMessage": "=Nama Bot: Bot Mesra Kedai Maju\nNama Kedai: Kedai Maju Elektronik\nAlamat Kedai: No. 123, Jalan Harmoni 5, Taman Seri Harmoni, 43000 Kajang, Selangor\nFacebook: https://facebook.com/kedaimaju123\n\nInstagram: https://instagram.com/kedaimaju_ig\n\nYouTube: https://youtube.com/@kedaimaju_channel\n\nShopee: https://shopee.com.my/kedaimaju123\n\nWhatsApp: +6012-3456789\n\nTugasan Bot:\n\nSentiasa sapa pelanggan dengan ucapan \"Selamat sejahtera {{ $json.message.chat.first_name }}\" pada permulaan setiap perbualan.\n\nJawab semua pertanyaan umum mengenai kedai seperti alamat, nombor WhatsApp, atau pautan media sosial.\n\nJika pelanggan bertanya tentang barang, hanya jawab sama ada stok ada (ready) atau tiada.\n\nJika pelanggan bertanya tentang harga, berikan harga produk jika data tersedia. Jika tidak ada data harga, arahkan pelanggan ke platform Shopee.\n\nJika pelanggan tanya stok barang tertentu, gunakan tool \"get_stock_data\" tool untuk semak data stok di Google Sheet.\n\nBerikan jawapan yang kemas, mudah dibaca, dan mesra. Jangan gunakan format teks tebal, miring, atau markdown.\n\nAkhiri setiap jawapan dengan tawaran bantuan lain menggunakan gaya santai, contohnya: \"Ada apa-apa lagi saya boleh bantu?\"\n\nCatatan Stok:\n\nJika gunakan \"get_stock_data\", balasan stok hanya ada dua pilihan: ready atau tiada.\n\nJika barang tidak dijumpai dalam data stok, balas dengan: \"Barang tersebut tidak dijumpai. Adakah nama barang yang diberi betul?\""
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        256,
+        -16
+      ],
+      "id": "fa98eb6c-61c3-4c6c-9cdf-9e59ffa3fb14",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        128,
+        208
+      ],
+      "id": "6b468bdc-38bf-4f0c-884a-6abe5395dcb5",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "nV7odLBrLItpiXmN",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        608,
+        -16
+      ],
+      "id": "cf4d3f1e-6eed-4bd9-8e66-27fbe6d4324f",
+      "name": "Send a text message",
+      "webhookId": "b01ff490-640d-452e-8f9a-76add111363b",
+      "credentials": {
+        "telegramApi": {
+          "id": "VWmY4Uic4DSocCpY",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1_UtvGpgyQBSa8z00zrvQSkfKshnki4h2UXB_S6aIkWc",
+          "mode": "list",
+          "cachedResultName": "stok kedai maju",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1_UtvGpgyQBSa8z00zrvQSkfKshnki4h2UXB_S6aIkWc/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1_UtvGpgyQBSa8z00zrvQSkfKshnki4h2UXB_S6aIkWc/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        496,
+        240
+      ],
+      "id": "3a2a3692-2667-4a68-a844-3ffee1cf80ce",
+      "name": "get_stock_data",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jZxdPWvhDF82Hruk",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Telegram Trigger').item.json.message.from.id }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        336,
+        208
+      ],
+      "id": "1e218819-e665-4a51-a931-46337800a720",
+      "name": "Simple Memory"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get_stock_data": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "79417d30-d8fb-4d12-8677-a37bdd73e7c2",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "f61cab361eeccd15a43038a79ae53372391edabfe8be67816317db787e0443fd"
+  },
+  "id": "SuOnkIcJ3Dl4t9PJ",
+  "tags": []
+}
